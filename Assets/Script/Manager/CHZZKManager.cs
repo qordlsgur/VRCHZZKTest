@@ -61,7 +61,7 @@ public class CHZZKManager : MonoBehaviour
         if (chat.content == "ㅎㅇ")
         {
             Debug.Log("ㅎㅇ 감지!");
-            virtualController.SetParameter("ParamHappy");
+            virtualController.SetParameter("ParamHappy", 1f);
         }
     }
 

@@ -3,6 +3,7 @@ using System;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using static Mediapipe.Unity.Sample.FaceLandmarkDetection.FaceLandmarkerRunner;
 
 public class AndroidUdpClient
 {
@@ -11,9 +12,14 @@ public class AndroidUdpClient
 
     // 안드로이드여서 컴퓨터의 IP를 받아온다.
     private string serverIP = "192.168.1.102";
-    
+
     // 실행중인 프로그램이 바인딩한 포트 번호
     private int serverPort = 54000;
+
+    float leftCenterX = 0.6613f;
+    float leftCenterY = 0.40927f;
+    float rightCenterX = 0.65586f;
+    float rightCenterY = 0.61463f;
 
     // 생성자로 
     public AndroidUdpClient()
@@ -22,43 +28,45 @@ public class AndroidUdpClient
     }
 
     // 전달해 줄 데이터를 받아오기 위해서 함수를 만들어 준다.
-    public void Send(FaceLandmarkerResult result)
+    public void Send(FaceData result)
     {
-        // 받아온 랜드 마커의 xyz값을 가지고 온다.
-        var landmarks = result.faceLandmarks[0].landmarks;
+        float leftX = Mathf.InverseLerp(
+            result.LeftEyeData.Inner.x,
+            result.LeftEyeData.Outer.x,
+            result.LeftEyeData.IrisCenter.x
+        );
 
-        // 사이즈를 랜드마커의 갯수 * (x,y,z)3 * float크기
-        int size = landmarks.Count * 3 * sizeof(float);
+        float leftY = Mathf.InverseLerp(
+            result.LeftEyeData.Upper.y,
+            result.LeftEyeData.Lower.y,
+            result.LeftEyeData.IrisCenter.y
+        );
 
-        // 사이즈를 만들어 둔다.
-        byte[] buffer = new byte[size];
+        float rightX = Mathf.InverseLerp(
+            result.RightEyeData.Inner.x,
+            result.RightEyeData.Outer.x,
+            result.RightEyeData.IrisCenter.x
+        );
 
-        // 다음 데이터를 어디에 넣어야 할 지 알아야 하기 때문에 필요하다.
-        int offset = 0;
+        float rightY = Mathf.InverseLerp(
+            result.RightEyeData.Upper.y,
+            result.RightEyeData.Lower.y,
+            result.RightEyeData.IrisCenter.y
+        );
 
-        // 이제 모든 값을 넣어준다.
-        foreach(var landmark in landmarks)
-        {
-            WriteFloat(buffer, ref offset, landmark.x);
-            WriteFloat(buffer, ref offset, landmark.y);
-            WriteFloat(buffer, ref offset, landmark.z);
-        }
+        Debug.Log($"leftX: {leftX}, rightX: {rightX}");
 
-        // udp에 통신을 해주기 위해서 값을 넣은 Buffer, Buffer의 사이즈, 서버의 Ip와 Port를 넣어준다.
+        float eyeX = (leftX + rightX) / 2f;
+        float eyeY = (leftY + rightY) / 2f;
+
+        byte[] buffer = new byte[8];
+        Buffer.BlockCopy(BitConverter.GetBytes(eyeX), 0, buffer, 0, 4);
+        Buffer.BlockCopy(BitConverter.GetBytes(eyeY), 0, buffer, 4, 4);
         udpClient.Send(buffer, buffer.Length, serverIP, serverPort);
     }
 
-    // x,y,z의 값을 다 넘겨주기 위해서 설정을 해둔다.
-    private void WriteFloat(byte[] buffer, ref int offset, float value)
+    public void Close()
     {
-        // float 1개를 byte 배열로 바꿔준다.
-        byte[] bytes = BitConverter.GetBytes(value);
-
-        // 방금 만들어둔 buffer를 현재 offset위치에 복사한다.
-        Buffer.BlockCopy(bytes, 0, buffer, offset, sizeof(float));
-
-        // offset 증가
-        offset += sizeof(float);
+        udpClient?.Close();
     }
-
 }

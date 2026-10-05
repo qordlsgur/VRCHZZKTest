@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class VirtualController : MonoBehaviour
 {
+    public PCUdpClient pcUpdClient;
+
     public CubismParametersInspector cubismParametersInspector;
     public CubismParameter[] cubismParameters;
 
@@ -20,19 +22,17 @@ public class VirtualController : MonoBehaviour
 
     void Update()
     {
-        //if (Keyboard.current.spaceKey.isPressed)
-        //{
-        //    SetParameter("ParamHappy");
-        //}
+        SetParameter("ParamEyeBallX", pcUpdClient.eyeX);
+        SetParameter("ParamEyeBallY", pcUpdClient.eyeY);
     }
 
-    public void SetParameter(string Name)
+    public void SetParameter(string Name, float value)
     {
         foreach (var parameter in cubismParameters)
         {
             if (parameter.Id == Name)
             {
-                parameter.Value = 1f;
+                parameter.Value = value;
             }
         }
     }

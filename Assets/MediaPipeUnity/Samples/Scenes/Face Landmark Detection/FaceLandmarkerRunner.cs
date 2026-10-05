@@ -19,8 +19,28 @@ namespace Mediapipe.Unity.Sample.FaceLandmarkDetection
 
         public readonly FaceLandmarkDetectionConfig config = new FaceLandmarkDetectionConfig();
 
+        private AndroidUdpClient androidUdpClient;
+
+        public struct FaceData
+        {
+            public EyekData LeftEyeData;
+            public EyekData RightEyeData;
+        };
+
+        public struct EyekData
+        {
+            public Vector3 Outer;
+            public Vector3 Inner;
+            public Vector3 Upper;
+            public Vector3 Lower;
+            public Vector3 IrisCenter;
+        };
+
+        private FaceData Data = new FaceData();
+
         public override void Stop()
         {
+            androidUdpClient?.Close();
             base.Stop();
             _textureFramePool?.Dispose();
             _textureFramePool = null;
@@ -28,6 +48,7 @@ namespace Mediapipe.Unity.Sample.FaceLandmarkDetection
 
         protected override IEnumerator Run()
         {
+            androidUdpClient = new AndroidUdpClient();
             Debug.Log($"Delegate = {config.Delegate}");
             Debug.Log($"Image Read Mode = {config.ImageReadMode}");
             Debug.Log($"Running Mode = {config.RunningMode}");
@@ -158,6 +179,24 @@ namespace Mediapipe.Unity.Sample.FaceLandmarkDetection
         private void OnFaceLandmarkDetectionOutput(FaceLandmarkerResult result, Image image, long timestamp)
         {
             _faceLandmarkerResultAnnotationController.DrawLater(result);
+
+            Data.LeftEyeData.Outer = ChangeVector(result.faceLandmarks[0].landmarks[33]);
+            Data.LeftEyeData.Inner = ChangeVector(result.faceLandmarks[0].landmarks[133]);
+            Data.LeftEyeData.Upper = ChangeVector(result.faceLandmarks[0].landmarks[159]);
+            Data.LeftEyeData.Lower = ChangeVector(result.faceLandmarks[0].landmarks[145]);
+            Data.LeftEyeData.IrisCenter = ChangeVector(result.faceLandmarks[0].landmarks[468]);
+            Data.RightEyeData.Outer = ChangeVector(result.faceLandmarks[0].landmarks[263]);
+            Data.RightEyeData.Inner = ChangeVector(result.faceLandmarks[0].landmarks[362]);
+            Data.RightEyeData.Upper = ChangeVector(result.faceLandmarks[0].landmarks[386]);
+            Data.RightEyeData.Lower = ChangeVector(result.faceLandmarks[0].landmarks[374]);
+            Data.RightEyeData.IrisCenter = ChangeVector(result.faceLandmarks[0].landmarks[473]);
+
+            androidUdpClient.Send(Data);
+        }
+
+        private Vector3 ChangeVector(Mediapipe.Tasks.Components.Containers.NormalizedLandmark result)
+        {
+            return new Vector3(result.x, result.y, result.z);
         }
     }
 }
