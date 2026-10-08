@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using System.Collections.Concurrent;
+using System.Threading.Tasks;
 
 [System.Serializable]
 public class Donation
@@ -20,7 +21,7 @@ public class Chat
 
 public class CHZZKManager : MonoBehaviour
 {
-    public VirtualController virtualController;
+    public VtuberStodioLoaclHost vtuberStodioLoaclHost;
 
     private ConcurrentQueue<string> chatQueue = new ConcurrentQueue<string>();
 
@@ -32,13 +33,16 @@ public class CHZZKManager : MonoBehaviour
         }
     }
 
-    public void DonationEvent(string message)
+    public async Task DonationEvent(string message)
     {
         Donation donation = JsonConvert.DeserializeObject<Donation>(message);
 
         if(donation.donationType == "CHAT")
         {
-
+            if(donation.payAmount <= 10000)
+            {
+                await vtuberStodioLoaclHost.SetHotKey("HAMMER");
+            }
         }
 
         else
@@ -52,7 +56,7 @@ public class CHZZKManager : MonoBehaviour
         chatQueue.Enqueue(message);
     }
 
-    public void ChatEvent(string message)
+    public async Task ChatEvent(string message)
     {
         Chat chat = JsonConvert.DeserializeObject<Chat>(message);
 
@@ -61,7 +65,7 @@ public class CHZZKManager : MonoBehaviour
         if (chat.content == "ㅎㅇ")
         {
             Debug.Log("ㅎㅇ 감지!");
-            virtualController.SetParameter("ParamHappy", 1f);
+            await vtuberStodioLoaclHost.SetHotKey("Close eye");
         }
     }
 

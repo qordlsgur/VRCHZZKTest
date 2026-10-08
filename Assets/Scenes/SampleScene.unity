@@ -138,7 +138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &42215656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 213d6801cca22b04e986e7b9128e9499, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  virtualController: {fileID: 0}
+  vtuberStodioLoaclHost: {fileID: 1706905000}
 --- !u!114 &42215660
 MonoBehaviour:
   m_ObjectHideFlags: 0

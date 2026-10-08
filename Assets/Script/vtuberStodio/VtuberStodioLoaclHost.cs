@@ -49,7 +49,7 @@ public class VtuberStodioLoaclHost : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             //Setexpressions("exp_05.exp3.json");
-            SetHotKey("Close eye");
+            SetHotKey("HAMMER");
         }
     }
 
@@ -167,7 +167,7 @@ public class VtuberStodioLoaclHost : MonoBehaviour
         await VtuberStudioSoc.SendText(request);
     }
 
-    private async Task SetHotKey(string HotKey)
+    public async Task SetHotKey(string HotKey)
     {
         Debug.Log($"{HotKey}");
 
