@@ -71,7 +71,8 @@ public class CHZZKListener : MonoBehaviour
 
     private string redirectUrl = "http://localhost:8080/";
     private string baseURL = "https://openapi.chzzk.naver.com";
-    private string clientSecret = "2qXaknxusO_DTPjx8s0eddsIC9wyUnZ2gpS0a_9fOs4";
+    [SerializeField]
+    private CHZZKSecrets clientSecret;
     private string ContentType = "application/json";
     private bool isRunning = false;
     private string accessToken;
@@ -176,7 +177,7 @@ public class CHZZKListener : MonoBehaviour
             // 치지직 애플리케이션에서 받아온 clientID
             clientId = chzzkLocalHost.clientID,
             // 치지직 애플리케이션에서 받은 clientSecret
-            clientSecret = clientSecret,
+            clientSecret = clientSecret.clientSecret,
             // 위에서 받은 code
             code = this.code,
             // 인증할 때 만든 state값

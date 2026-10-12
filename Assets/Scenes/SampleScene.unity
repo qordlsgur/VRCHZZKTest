@@ -170,6 +170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chzzkLocalHost: {fileID: 42215656}
   chzzkManager: {fileID: 42215659}
+  clientSecret: {fileID: 11400000, guid: 656fbf40df19264449885fbbbc338827, type: 2}
   code: 
 --- !u!4 &42215658
 Transform:
@@ -450,7 +451,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1706905000
 MonoBehaviour:
   m_ObjectHideFlags: 0

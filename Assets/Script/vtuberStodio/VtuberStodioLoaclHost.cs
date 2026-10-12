@@ -46,11 +46,11 @@ public class VtuberStodioLoaclHost : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            //Setexpressions("exp_05.exp3.json");
-            SetHotKey("HAMMER");
-        }
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    //Setexpressions("exp_05.exp3.json");
+        //    //SetHotKey("HAND");
+        //}
     }
 
     private async Task SetupController()

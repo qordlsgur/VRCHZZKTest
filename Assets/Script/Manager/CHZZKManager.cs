@@ -41,7 +41,8 @@ public class CHZZKManager : MonoBehaviour
         {
             if(donation.payAmount <= 10000)
             {
-                await vtuberStodioLoaclHost.SetHotKey("HAMMER");
+                Debug.Log("후원 이벤트");
+                await vtuberStodioLoaclHost.SetHotKey("HAND");
             }
         }
 
