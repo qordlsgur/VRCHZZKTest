@@ -4,7 +4,7 @@
 **개발 인원:** 1인 개발  
 **개발 기간:** 2026.08.30 ~ 2026.10.03
 
-**Language:** C++  
+**Language:** C#  
 **Engine:** Unity6
 **IDE:** Visual Studio 2022
 
